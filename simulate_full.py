@@ -361,3 +361,27 @@ plt.legend()
 plt.grid(True)
 plt.tight_layout()
 plt.show()
+# -------------------------------------------------
+# SAVE SIMULATION RESULTS
+# -------------------------------------------------
+
+np.savez(
+    "jolivet_full_results.npz",
+    time=time_full,
+    states=states_full,
+    CBF=CBF,
+    tstim=tstim,
+    Ne=Ne,
+)
+
+print()
+print("========================================")
+print("RESULT FILE SAVED")
+print("========================================")
+print("CBF setting:", CBF)
+print("Stimulation duration:", tstim)
+print("Ne:", Ne)
+print("Saved to: jolivet_full_results.npz")
+
+print()
+print("Simulation results saved to jolivet_full_results.npz")

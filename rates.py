@@ -1,6 +1,7 @@
 import numpy as np
 
 from parameters import get_parameters
+from initial_state import initial_state
 from blood_flow import blood_flow
 from conductance import (
     excitatory_conductance,
@@ -47,9 +48,11 @@ def calculate_rates(
     r = {}
 
     # Baseline neuronal sodium concentration
-    # Original MATLAB: Na0 = Y0(1)
-    Na0 = y[0]
-
+    # MATLAB: Na0 = Y0(1), fixed throughout simulation
+    # Fixed baseline neuronal sodium concentration.
+    # MATLAB equivalent: Na0 = Y0(1)
+    Na0 = initial_state[0]
+    
     r["vLeakNan"] = (
         p["SmVn"] * p["gNan"] / p["F"]
         * (p["RTF"] * np.log(p["Nae"] / y[0]) - y[27])

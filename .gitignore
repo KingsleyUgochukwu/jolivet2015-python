@@ -1,4 +1,5 @@
-# Python virtual environment
+
+# Python virtual environments
 .venv/
 venv/
 
@@ -9,21 +10,16 @@ __pycache__/
 # IDE/editor files
 .vscode/
 
-# OS-generated files
+# Operating system files
 .DS_Store
 Thumbs.db
 
-# Generated figures/data
-*.png
-# Python cache
-__pycache__/
-*.pyc
-
-# Virtual environment
-.venv/
-
-# Generated simulation data
+# Temporary numerical archives
 *.npz
 
 # Local project archives
 *.zip
+
+# Temporary backup scripts
+*_backup.py
+*_single_1000s_backup.py

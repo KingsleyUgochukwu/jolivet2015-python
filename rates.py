@@ -3,6 +3,7 @@ import numpy as np
 from parameters import get_parameters
 from initial_state import initial_state
 from blood_flow import blood_flow
+from ischemia_protocol import ischemia_blood_flow
 from conductance import (
     excitatory_conductance,
     inhibitory_conductance,
@@ -22,6 +23,8 @@ def calculate_rates(
     DCBF=0.0,
     Ne=240,
     LONG="off",
+    ischemia=False,
+    ischemia_duration=1000.0,
 ):
     """
     Calculate metabolic rates for the Jolivet et al. (2015) model.
@@ -317,18 +320,27 @@ def calculate_rates(
         # -------------------------------------------------
     # Cerebral blood flow
     # -------------------------------------------------
-
-    BF = blood_flow(
-        t=t + TIME,
-        t1=t1,
-        tstim=tstim,
-        cbf=CBF,
-        F0=F0,
-        species=species,
-        DCBF=DCBF,
-    )
+    if ischemia:
+        BF = ischemia_blood_flow(
+            t=t + TIME,
+            F0=F0,
+            onset=100.0,
+            duration=ischemia_duration,
+            reduction=0.80,
+        )
+    else:
+        BF = blood_flow(
+            t=t + TIME,
+            t1=t1,
+            tstim=tstim,
+            cbf=CBF,
+            F0=F0,
+            species=species,
+            DCBF=DCBF,
+        )
 
     r["BF"] = BF
+
 
     # -------------------------------------------------
     # Capillary exchange

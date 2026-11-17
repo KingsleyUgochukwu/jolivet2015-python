@@ -158,6 +158,132 @@ Important limitations include numerical solver sensitivity, dependence on model 
 
 Future work could include parameter sensitivity analysis, investigation of metabolic perturbations, and comparisons with additional experimental measurements.
 
+
+## Transient Cerebral Ischemia and Reperfusion Investigation
+
+Building on the original model reproduction, I extended the Python implementation to investigate neuronal and astrocytic energy metabolism during transient cerebral ischemia and reperfusion.
+
+### Research Objective
+
+To investigate how the duration of reduced cerebral blood flow influences ATP availability, extracellular glucose and lactate dynamics, and neuronal–astrocytic lactate transport during ischemia and subsequent reperfusion.
+
+### Simulation Protocol
+
+- Baseline cerebral blood flow: 0.012.
+- Ischemia onset: 100 seconds.
+- Cerebral blood flow reduction: 80%.
+- Ischemia durations investigated: 300, 600, 1000, 1500 and 2000 seconds.
+- Reperfusion: restoration of baseline cerebral blood flow.
+- Reperfusion observation period: 1000 seconds.
+
+The 1000-second condition was included as an anchor for comparison with an earlier GAMMA-MRI modelling report. The additional durations were exploratory simulation conditions, not clinical thresholds.
+
+### Metabolic Response Analysis
+
+The simulations were used to examine:
+
+- Neuronal and astrocytic ATP depletion and recovery.
+- Extracellular glucose and lactate concentration dynamics.
+- Capillary oxygen dynamics.
+- Cellular lactate dehydrogenase reaction rates.
+- Neuronal, astrocytic and vascular lactate transport.
+- Changes in extracellular lactate balance during reperfusion.
+
+Across the five simulated durations, neuronal ATP depletion at the end of ischemia ranged from approximately 96.68% to 99.32%, while astrocytic ATP depletion ranged from 79.07% to 93.81%.
+
+After the fixed 1000-second reperfusion period, neuronal ATP approached its pre-ischemia baseline in all five simulations. Astrocytic ATP showed a modest overshoot relative to baseline in the model.
+
+### Extracellular Lactate Mass-Balance Analysis
+
+The extracellular lactate balance was decomposed into three transport contributions:
+
+1. Neuronal-to-extracellular lactate transport.
+2. Astrocytic-to-extracellular lactate transport.
+3. Extracellular-to-capillary lactate transport.
+
+The model's extracellular lactate balance is represented by:
+
+
+The extracellular lactate balance is represented by:
+
+$$
+\frac{d[LAC]_e}{dt}
+=
+\frac{v_{LACne}}{r_{en}}
++
+\frac{v_{LACge}}{r_{eg}}
+-
+v_{LACec}
+$$
+
+
+The analysis revealed:
+
+- Astrocytic transport made a positive cumulative contribution to extracellular lactate across all five simulations.
+- Neuronal transport exhibited transient positive contributions during reperfusion in the longer ischemia simulations, although its cumulative contribution over the complete reperfusion period remained negative.
+- Extracellular-to-capillary transport contributed negatively to the extracellular lactate balance.
+- The integrated transport contributions reproduced the simulated change in extracellular lactate concentration with very small numerical differences.
+
+Astrocytic transport represented approximately 48.4–49.5% of the combined absolute integrated transport magnitude across the five conditions. These percentages describe relative transport magnitudes, not the proportion of total lactate production.
+
+### Comparison with Experimental Studies
+
+The model's glucose and lactate responses were compared descriptively with published transient cerebral ischemia studies, including:
+
+- Frykholm et al. (2005), investigating transient middle cerebral artery occlusion in macaques.
+- Havelund et al. (2019), investigating transient focal ischemia in rats.
+
+The comparison was exploratory and was not intended as formal model validation. Differences in species, ischemia protocols, brain regions, sampling methods and observation periods limit direct quantitative comparisons.
+
+### Figures and Results
+
+- Figures 1–5: ATP, glucose, lactate, oxygen and metabolic time-course responses.
+- Figure 6: Exploratory comparison with experimental glucose and lactate observations.
+- Figure 7: Cellular lactate dehydrogenase fluxes.
+- Figure 8: Lactate transport fluxes.
+- Figure 9: Extracellular lactate balance.
+- Figure 10: Numerical consistency of the extracellular lactate mass-balance analysis.
+
+### Reproducibility
+
+The ischemia–reperfusion investigation can be explored using:
+
+```bash
+
+# Run the original ischemia-reperfusion simulation
+python simulate_ischemia.py
+
+# Run ischemia simulations for five durations
+python simulate_ischemia_sweep.py 300
+python simulate_ischemia_sweep.py 600
+python simulate_ischemia_sweep.py 1000
+python simulate_ischemia_sweep.py 1500
+python simulate_ischemia_sweep.py 2000
+
+# Analyse ischemia and metabolic responses
+python analyse_ischemia_sweep.py
+python analyse_lactate_fluxes.py
+
+# Analyse extracellular lactate balance
+python analyse_lactate_mass_balance.py
+python analyse_reperfusion_mass_balance.py
+python analyse_reperfusion_contribution_peaks.py
+python analyse_cumulative_lactate_contributions.py
+python analyse_relative_lactate_contributions.py
+
+```
+
+The scripts use the model implementation and simulation output files in this repository. Some analyses require the corresponding simulation datasets to have been generated first.
+
+### Limitations
+
+These results are predictions from a mechanistic computational model. They do not independently establish neuronal survival, tissue protection or clinical outcomes.
+
+The original model does not explicitly represent glycogen metabolism. Further extensions, including glycogen metabolism and the pentose phosphate pathway, would require additional model development and evaluation.
+
+The current investigation is intended as a foundation for further comparison with experimental measurements and discussion of potential model extensions.
+
+
 ## Original Publication and Attribution
 
 Jolivet, R., Coggan, J. S., Allaman, I., & Magistretti, P. J. (2015). Multi-timescale modeling of activity-dependent metabolic coupling in the neuron-glia-vasculature ensemble. *PLOS Computational Biology, 11*(2), e1004036.

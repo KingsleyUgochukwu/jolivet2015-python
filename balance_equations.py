@@ -16,6 +16,8 @@ def balance_equations(
     DCBF=0.4,
     Ne=240,
     LONG="off",
+    ischemia=False,
+    ischemia_duration=1000.0,
 ):
     """
     Differential equations for the Jolivet et al. (2015) model.
@@ -39,6 +41,8 @@ def balance_equations(
     DCBF=DCBF,
     Ne=Ne,
     LONG=LONG,
+    ischemia=ischemia,
+    ischemia_duration=ischemia_duration,
 )
     # -------------------------------------------------
     # AMP-ATP relationship

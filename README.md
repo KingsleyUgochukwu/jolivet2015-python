@@ -283,6 +283,13 @@ The original model does not explicitly represent glycogen metabolism. Further ex
 
 The current investigation is intended as a foundation for further comparison with experimental measurements and discussion of potential model extensions.
 
+###  References
+
+Frykholm, P., Hillered, L., Långström, B., Persson, L., Valtysson, J., & Enblad, P. (2005). Relationship between cerebral blood flow and oxygen metabolism, and extracellular glucose and lactate concentrations during middle cerebral artery occlusion and reperfusion: A microdialysis and positron emission tomography study in nonhuman primates. *Journal of Neurosurgery, 102*(6), 1076–1084. https://doi.org/10.3171/jns.2005.102.6.1076
+
+Havelund, J. F., Nygaard, K. H., Nielsen, T. H., Nordström, C.-H., Poulsen, F. R., Færgeman, N. J., Forsse, A., & Gramsbergen, J. B. (2019). In vivo microdialysis of endogenous and ¹³C-labeled TCA metabolites in rat brain: Reversible and persistent effects of mitochondrial inhibition and transient cerebral ischemia. *Metabolites, 9*(10), 204. https://doi.org/10.3390/metabo9100204
+
+Jolivet, R. (2023). *D5.1: Report on biophysical model* (Version 2.0). GAMMA-MRI, Horizon 2020 Research and Innovation Programme, Grant Agreement No. 964644. Submitted 4 December 2023.
 
 ## Original Publication and Attribution
 

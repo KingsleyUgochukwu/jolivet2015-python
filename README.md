@@ -43,7 +43,7 @@ The model implementation contains 33 state variables and uses the parameterizati
 - `blood_flow.py` — vascular and blood-flow-related calculations.
 - `simulation_runner.py` — numerical simulation routines.
 - `simulate_full.py` — full-model simulation.
-- `compare_matlab_python.py` — comparison against reference MATLAB outputs.
+- `compare_matlab_python.py` — internal consistency audit of the Python implementation (not a quantitative MATLAB comparison).
 
 The stiff ordinary differential equation system is integrated in Python using SciPy's BDF solver.
 
@@ -255,7 +255,7 @@ Jolivet, R., Coggan, J. S., Allaman, I., & Magistretti, P. J. (2015). Multi-time
 
 ## Attribution
 
-The original mathematical model and scientific framework were developed by Jolivet and colleagues. This repository documents my independent Python implementation, numerical comparisons, and subsequent computational analyses. The original MATLAB source code is not redistributed in this repository.
+The original mathematical model and scientific framework were developed by Jolivet and colleagues. This repository documents my independent Python implementation, internal consistency checks, and subsequent computational analyses. The original MATLAB source code is not redistributed in this repository.
 
 ## Author
 

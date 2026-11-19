@@ -47,16 +47,13 @@ The model implementation contains 33 state variables and uses the parameterizati
 
 The stiff ordinary differential equation system is integrated in Python using SciPy's BDF solver.
 
-## Numerical comparison with the MATLAB implementation
+## Python implementation checks and validation status
 
-The Python implementation was compared with reference outputs from the original MATLAB implementation under selected reference simulation conditions. For the selected 14 response and endpoint metrics, the comparison yielded:
+The current `compare_matlab_python.py` script performs an internal audit of the Python implementation. It checks the 33-element state vector, initial conditions, resting and stimulated rate/derivative calculations, finite numerical values, and selected expected stimulation-onset behaviours.
 
-| Comparison metric | Result |
-|---|---:|
-| Mean percentage error | 0.0185% |
-| Maximum percentage error | 0.1507% |
+These checks are useful for detecting implementation inconsistencies within the Python model. They do **not** constitute a quantitative comparison with the original MATLAB implementation. Direct MATLAB reference trajectories or numerical outputs are still required to establish cross-language agreement. Systematic reproduction of the published model figures and comparison with the corresponding reference results therefore remain important validation tasks.
 
-This supports close agreement for the selected metrics and conditions. It is not evidence of complete numerical equivalence across all 33 state variables, all transient behaviour, or every possible simulation setting. The original MATLAB source code is not redistributed in this repository.
+The original MATLAB source code is not redistributed in this repository.
 
 ## Part I — Activity-dependent brain energy metabolism
 

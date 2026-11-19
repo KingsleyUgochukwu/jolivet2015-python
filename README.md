@@ -152,7 +152,7 @@ After the fixed 1000-second reperfusion period, neuronal ATP was approximately 9
 
 The simulations also examined extracellular glucose and lactate, capillary oxygen, lactate dehydrogenase reaction rates, and neuronal, astrocytic, and vascular lactate transport.
 
-The time courses show that the metabolic response depends on both the ischemia duration and the time elapsed during reperfusion. Comparisons between different ischemia durations must therefore specify whether values are taken at the end of ischemia, at a common reperfusion time, or at a trajectory-specific peak. End-of-ischemia values from different-duration simulations are not measurements at a common elapsed time.
+The time courses show that the metabolic response depends on both the ischemia duration and the time elapsed during reperfusion. Comparisons between different ischemia durations must therefore specify whether values are taken at the end of ischemia, at a common reperfusion time, or at a trajectory-specific peak. End-of-ischemia values from different-duration simulations are not measurements at a common elapsed time. The script `analyse_fixed_reperfusion_lactate.py` interpolates each lactate-flux time course at 0, 60, 300, 600 and 900 s after reperfusion onset and writes `lactate_fixed_reperfusion_comparison.csv`. This provides matched-time comparisons across the five ischemia durations.
 
 ### Extracellular lactate transport and mass balance
 
@@ -221,6 +221,9 @@ python simulate_ischemia_sweep.py 2000
 # Analyse the duration sweep and lactate fluxes
 python analyse_ischemia_sweep.py
 python analyse_lactate_fluxes.py
+
+# Compare lactate and transport contributions at matched reperfusion times
+python analyse_fixed_reperfusion_lactate.py
 
 # Analyse extracellular lactate mass balance and contributions
 python analyse_lactate_mass_balance.py

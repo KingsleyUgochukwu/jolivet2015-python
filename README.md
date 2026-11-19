@@ -146,7 +146,7 @@ The 1000-second ischemia condition was included as an anchor for comparison with
 
 At the end of ischemia, neuronal ATP depletion ranged from approximately 96.68% to 99.32% across the five simulated durations. Astrocytic ATP depletion ranged from approximately 79.07% to 93.81%.
 
-After the fixed 1000-second reperfusion period, neuronal ATP approached its pre-ischemia baseline in all five simulations. Astrocytic ATP reached approximately 102.14–102.58% of baseline, representing a modest model-predicted overshoot. This overshoot should not be interpreted as evidence of improved cellular health or tissue protection.
+After the fixed 1000-second reperfusion period, neuronal ATP was approximately 99.96–99.98% of its pre-ischemia baseline. Astrocytic ATP was approximately 102.01–102.04% of its pre-ischemia baseline, representing a modest model-predicted overshoot. The separate recovery metric, calculated as the fraction of the initial ATP depletion replenished, was approximately 99.96–99.98% for neuronal ATP and 102.14–102.58% for astrocytic ATP. Values above 100% indicate that the simulated ATP concentration exceeded its pre-ischemia baseline. This overshoot should not be interpreted as evidence of improved cellular health or tissue protection.
 
 ### Other metabolic variables
 
@@ -236,7 +236,7 @@ The analysis scripts depend on the corresponding simulation output files. Genera
 The results presented here are predictions from a mechanistic computational model. They do not independently establish neuronal survival, tissue protection, or clinical outcomes.
 
 Key limitations include:
-- The numerical comparisons with MATLAB cover selected metrics and do not establish equivalence for every state variable and condition.
+- The current comparison script performs internal consistency checks on the Python implementation; quantitative comparison against MATLAB reference outputs has not yet been completed.
 - Additional stimulation and ischemia–reperfusion simulations are model-based predictions and have not been independently validated against new experimental data.
 - Results depend on the model structure, parameterization, initial conditions, and numerical integration settings.
 - The current model does not explicitly represent glycogen metabolism. Adding glycogen metabolism or the pentose phosphate pathway would require further model development and evaluation.

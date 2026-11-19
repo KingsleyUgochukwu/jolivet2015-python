@@ -1,91 +1,93 @@
 # Python Reimplementation and Computational Analysis of the Jolivet et al. (2015) Neuron–Glia–Vasculature Model
 
-## Project Overview
+## Project overview
 
-This project presents a Python reimplementation and computational investigation of the neuron–glia–vasculature metabolic model described by Jolivet et al. (2015).
+This repository documents a Python implementation and computational investigation of the neuron–glia–vasculature metabolic model described by Jolivet et al. (2015). The work has two connected parts:
 
-The original model integrates neuronal electrical activity, astrocytic metabolism, energy substrate exchange, and vascular responses to investigate activity-dependent metabolic coupling in the brain.
+1. Reproduction and analysis of activity-dependent brain energy metabolism, including neuronal stimulation, ATP production and consumption, and phosphocreatine (PCr) dynamics.
+2. An extension of the model to investigate transient cerebral ischemia and reperfusion, with emphasis on cellular ATP responses, extracellular glucose and lactate, and lactate transport and mass balance.
 
-My objective is to reproduce the published mathematical framework in Python, evaluate its numerical behavior against the original MATLAB implementation, and investigate how changes in neuronal stimulation influence ATP availability, ATP-consuming processes, mitochondrial ATP production, and phosphocreatine (PCr) recovery.
+The original framework couples neuronal activity, astrocytic metabolism, substrate exchange, and vascular responses. The Python work aims to reproduce the published model behaviour and use the implementation to conduct additional, clearly identified computational experiments.
 
-This project forms part of my independent training in computational biology and systems neuroscience, building on my academic background in Biochemistry and Molecular Biology.
+This is an independent computational research and training project developed by Kingsley Nnaemeka Ugochukwu, MSc student in Biochemistry and Molecular Biology at Obafemi Awolowo University, Nigeria.
 
-## Scientific Background
+## Scientific background and questions
 
-Neuronal activity creates an increased demand for ATP, particularly through ion transport mechanisms required to restore ionic gradients following electrical activity.
+Neuronal activity increases ATP demand, particularly through ion-pumping processes that restore ionic gradients. The neuron–glia–vasculature model provides a mechanistic framework for examining how neuronal and astrocytic metabolism and vascular substrate delivery interact to meet this demand.
 
-The Jolivet et al. (2015) framework provides a mechanistic representation of the interactions between neuronal metabolism, astrocytic metabolism, and vascular substrate delivery.
+The project addresses two groups of questions:
 
-The present computational investigation focuses on three connected questions:
+**Activity-dependent metabolism**
+- How does increasing neuronal stimulation affect sodium accumulation, Na⁺/K⁺-ATPase activity, and neuronal ATP?
+- How do mitochondrial ATP production and creatine kinase-mediated PCr buffering respond to increased energy demand?
+- How similar are normalized PCr recovery trajectories across the tested stimulation conditions?
 
-1. How does increasing neuronal stimulation affect ATP availability and Na⁺/K⁺-ATPase activity?
-2. How do mitochondrial ATP production and creatine kinase-mediated phosphocreatine buffering respond to increased energy demand?
-3. Does the fractional recovery of neuronal phosphocreatine depend strongly on stimulation intensity?
+**Ischemia and reperfusion**
+- How does the duration of reduced cerebral blood flow affect neuronal and astrocytic ATP depletion and recovery?
+- How do extracellular glucose, lactate, and capillary oxygen vary during ischemia and reperfusion?
+- How do neuronal, astrocytic, and vascular lactate transport contribute to the extracellular lactate balance?
 
-## Python Implementation
+## Original model and Python implementation
 
-The project implements the model's coupled differential equations and associated metabolic rate expressions in Python.
+The implementation is based on the mathematical framework in:
 
-Key components include:
+Jolivet, R., Coggan, J. S., Allaman, I., & Magistretti, P. J. (2015). Multi-timescale modeling of activity-dependent metabolic coupling in the neuron-glia-vasculature ensemble. *PLOS Computational Biology, 11*(2), e1004036. https://doi.org/10.1371/journal.pcbi.1004036
+
+The model implementation contains 33 state variables and uses the parameterization and coupled balance equations of the original framework. Core Python modules include:
 
 - `parameters.py` — model parameters.
-- `initial_state.py` — initial conditions for the state variables.
+- `initial_state.py` — initial conditions.
 - `rates.py` — metabolic reaction rates and flux expressions.
-- `balance_equations.py` — differential equations governing model dynamics.
+- `balance_equations.py` — differential equations for the model state variables.
 - `conductance.py` — neuronal conductance-related calculations.
 - `blood_flow.py` — vascular and blood-flow-related calculations.
 - `simulation_runner.py` — numerical simulation routines.
 - `simulate_full.py` — full-model simulation.
-- `compare_matlab_python.py` — comparison with MATLAB reference outputs.
+- `compare_matlab_python.py` — comparison against reference MATLAB outputs.
 
-The model is numerically integrated using SciPy's stiff ODE solver (`BDF`).
+The stiff ordinary differential equation system is integrated in Python using SciPy's BDF solver.
 
-## MATLAB–Python Validation
+## Numerical comparison with the MATLAB implementation
 
-A major priority was to establish whether the Python implementation reproduces the original model's behavior before conducting additional analyses.
+The Python implementation was compared with reference outputs from the original MATLAB implementation under selected reference simulation conditions. For the selected 14 response and endpoint metrics, the comparison yielded:
 
-For a selected set of 14 response and endpoint metrics under the reference simulation conditions, the comparison yielded:
+| Comparison metric | Result |
+|---|---:|
+| Mean percentage error | 0.0185% |
+| Maximum percentage error | 0.1507% |
 
-- Mean percentage error: 0.0185%
-- Maximum percentage error: 0.1507%
+This supports close agreement for the selected metrics and conditions. It is not evidence of complete numerical equivalence across all 33 state variables, all transient behaviour, or every possible simulation setting. The original MATLAB source code is not redistributed in this repository.
 
-These results indicate close agreement for the selected metrics. They should not be interpreted as proof of complete numerical equivalence across all state variables, transient peaks, or simulation settings.
+## Part I — Activity-dependent brain energy metabolism
 
-## Stimulation-Dependent Metabolic Responses
+### Stimulation protocol and metabolic responses
 
-Five neuronal stimulation conditions were investigated:
+Five neuronal stimulation conditions were investigated: `Ne = 120, 180, 240, 300, 360`.
 
-`Ne = 120, 180, 240, 300, 360`
-
-Across this range, stronger stimulation was associated with:
-
+Across the tested range, stronger stimulation was associated with:
 - Greater neuronal sodium accumulation.
-- Increased Na⁺/K⁺-ATPase demand.
+- Increased Na⁺/K⁺-ATPase activity and pump demand.
 - Greater neuronal ATP depletion during stimulation.
 - Increased mitochondrial ATP production.
-- Greater neuronal phosphocreatine depletion.
+- Greater neuronal PCr depletion.
 
-The findings are consistent with the model's representation of activity-dependent energetic demand and metabolic compensation.
+These are responses within the model and its selected parameterization. They illustrate the relationship between neuronal activation, ion homeostasis, ATP demand, and metabolic compensation represented by the equations.
 
-### ATP Production and Consumption
+### ATP production and consumption
 
-The analysis separates contributions from glycolytic ATP production, mitochondrial ATP production, Na⁺/K⁺-ATPase consumption, basal ATP consumption, and creatine kinase-mediated buffering.
+The ATP-flux analysis separates contributions from glycolytic ATP production, mitochondrial ATP production, Na⁺/K⁺-ATPase consumption, basal ATP consumption, and creatine kinase-mediated buffering. This provides a flux-based interpretation of ATP concentration changes rather than relying on ATP concentration alone.
 
-The purpose is to interpret ATP concentration changes in terms of the metabolic fluxes represented in the mathematical model, rather than ATP concentration alone.
-
-Relevant scripts:
+Relevant analysis scripts include:
 
 - `analyze_experiments.py`
 - `analyze_atp_fluxes.py`
 - `mitochondrial_time_course.py`
 
-## Phosphocreatine Depletion and Recovery
+### Phosphocreatine depletion and recovery
 
-Phosphocreatine provides an important component of the modeled cellular energy-buffering system through the creatine kinase reaction.
+PCr is included as part of the model's cellular energy-buffering system through the creatine kinase reaction. Simulations were extended to examine PCr depletion and recovery following neuronal stimulation.
 
-Simulations were extended to examine the recovery of neuronal phosphocreatine following stimulation.
-
-For the five stimulation conditions, the neuronal phosphocreatine minima were approximately:
+The following minima were obtained from the extended PCr time-course analyses:
 
 | Stimulation (Ne) | Minimum PCr | Time of minimum (s) |
 |---|---:|---:|
@@ -95,13 +97,11 @@ For the five stimulation conditions, the neuronal phosphocreatine minima were ap
 | 300 | 4.443306 | 44.45 |
 | 360 | 4.173524 | 44.35 |
 
-Although stronger stimulation produced greater phosphocreatine depletion, normalized recovery trajectories were similar across the tested conditions.
-
-To compare recovery independently of the absolute depletion magnitude, the following normalization was used:
+Stronger stimulation produced greater PCr depletion in these simulations. To compare recovery independently of the absolute depletion magnitude, normalized recovery was calculated as:
 
 `Recovery (%) = 100 × (PCr(t) − PCr_min) / (PCr_initial − PCr_min)`
 
-The normalized recovery trajectories were compared against the reference condition (`Ne = 240`) using root mean square deviation (RMSD).
+The normalized trajectories were compared with the `Ne = 240` reference condition using root mean square deviation (RMSD):
 
 | Ne | RMSD (percentage points) |
 |---|---:|
@@ -111,89 +111,53 @@ The normalized recovery trajectories were compared against the reference conditi
 | 300 | 0.0607 |
 | 360 | 0.1645 |
 
-These small differences suggest that the model exhibits broadly similar fractional PCr recovery trajectories across the investigated stimulation range.
+The small RMSD values indicate broadly similar fractional PCr recovery trajectories across the tested stimulation conditions. This is a model-specific computational observation, not a claim that biological PCr recovery is universally independent of neuronal activity.
 
-This is a computational observation within the tested model configuration, not a claim that biological recovery kinetics are universally independent of neuronal activity.
-
-Relevant scripts:
+Relevant scripts include:
 
 - `analyze_phosphocreatine.py`
-- `compare_pcr_recovery.py`
 - `compare_normalized_pcr_recovery.py`
 - `calculate_pcr_rmsd.py`
 
-## Research Interpretation
+### Interpretation
 
-The simulations suggest that stronger neuronal activation increases ATP demand and phosphocreatine utilization, while mitochondrial ATP production responds to support energy requirements.
+Taken together, the stimulation simulations suggest that stronger neuronal activation increases ATP demand and PCr utilization, while mitochondrial ATP production responds to the increased energy requirement. In the model, neuronal ATP concentration can approach its reference level before the PCr pool has fully recovered. ATP availability and recovery of energy-buffering reserves therefore provide related but distinct views of the simulated metabolic response.
 
-An additional observation is that neuronal ATP concentration can approach its reference level before the phosphocreatine pool has fully recovered.
+## Part II — Transient cerebral ischemia and reperfusion
 
-This difference highlights the importance of considering both ATP availability and the recovery of intracellular energy-buffering reserves when interpreting the model's metabolic response.
+### Research objective
 
-The project also illustrates how mathematical modeling can be used to investigate relationships between ion homeostasis, energy demand, mitochondrial metabolism, and creatine kinase dynamics.
+The model was extended to investigate how the duration of reduced cerebral blood flow influences cellular ATP, extracellular glucose and lactate dynamics, and neuronal–astrocytic lactate transport during ischemia and subsequent reperfusion.
 
-## Reproducibility
+### Simulation protocol
 
-The project uses Python with NumPy, SciPy, pandas, and Matplotlib.
+The ischemia–reperfusion simulations used the following settings:
 
-Simulation and analysis entry points include:
+| Parameter | Setting |
+|---|---:|
+| Baseline cerebral blood flow | 0.012 |
+| Ischemia onset | 100 s |
+| Cerebral blood flow reduction | 80% |
+| Cerebral blood flow during ischemia | 0.0024 |
+| Ischemia durations | 300, 600, 1000, 1500, 2000 s |
+| Reperfusion | Restoration of baseline flow |
+| Reperfusion observation period | 1000 s |
 
-```bash
-python run_experiments.py
-python analyze_experiments.py
-python analyze_atp_fluxes.py
-python mitochondrial_time_course.py
-python analyze_phosphocreatine.py
-python compare_normalized_pcr_recovery.py
-python calculate_pcr_rmsd.py
-```
+The 1000-second ischemia condition was included as an anchor for comparison with an earlier GAMMA-MRI modelling report. The other durations are exploratory simulation conditions; they are not clinical thresholds.
 
-Some analysis scripts require simulation output files generated by earlier runs. Numerical settings, input file requirements, and execution order should be checked before attempting full reproduction.
+### ATP depletion and recovery
 
-## Limitations and Future Directions
+At the end of ischemia, neuronal ATP depletion ranged from approximately 96.68% to 99.32% across the five simulated durations. Astrocytic ATP depletion ranged from approximately 79.07% to 93.81%.
 
-The current work is based on a published mechanistic model and its specified parameterization.
+After the fixed 1000-second reperfusion period, neuronal ATP approached its pre-ischemia baseline in all five simulations. Astrocytic ATP reached approximately 102.14–102.58% of baseline, representing a modest model-predicted overshoot. This overshoot should not be interpreted as evidence of improved cellular health or tissue protection.
 
-Important limitations include numerical solver sensitivity, dependence on model assumptions, and the absence of independent experimental validation of the additional simulation results.
+### Other metabolic variables
 
-Future work could include parameter sensitivity analysis, investigation of metabolic perturbations, and comparisons with additional experimental measurements.
+The simulations also examined extracellular glucose and lactate, capillary oxygen, lactate dehydrogenase reaction rates, and neuronal, astrocytic, and vascular lactate transport.
 
+The time courses show that the metabolic response depends on both the ischemia duration and the time elapsed during reperfusion. Comparisons between different ischemia durations must therefore specify whether values are taken at the end of ischemia, at a common reperfusion time, or at a trajectory-specific peak. End-of-ischemia values from different-duration simulations are not measurements at a common elapsed time.
 
-## Transient Cerebral Ischemia and Reperfusion Investigation
-
-Building on the original model reproduction, I extended the Python implementation to investigate neuronal and astrocytic energy metabolism during transient cerebral ischemia and reperfusion.
-
-### Research Objective
-
-To investigate how the duration of reduced cerebral blood flow influences ATP availability, extracellular glucose and lactate dynamics, and neuronal–astrocytic lactate transport during ischemia and subsequent reperfusion.
-
-### Simulation Protocol
-
-- Baseline cerebral blood flow: 0.012.
-- Ischemia onset: 100 seconds.
-- Cerebral blood flow reduction: 80%.
-- Ischemia durations investigated: 300, 600, 1000, 1500 and 2000 seconds.
-- Reperfusion: restoration of baseline cerebral blood flow.
-- Reperfusion observation period: 1000 seconds.
-
-The 1000-second condition was included as an anchor for comparison with an earlier GAMMA-MRI modelling report. The additional durations were exploratory simulation conditions, not clinical thresholds.
-
-### Metabolic Response Analysis
-
-The simulations were used to examine:
-
-- Neuronal and astrocytic ATP depletion and recovery.
-- Extracellular glucose and lactate concentration dynamics.
-- Capillary oxygen dynamics.
-- Cellular lactate dehydrogenase reaction rates.
-- Neuronal, astrocytic and vascular lactate transport.
-- Changes in extracellular lactate balance during reperfusion.
-
-Across the five simulated durations, neuronal ATP depletion at the end of ischemia ranged from approximately 96.68% to 99.32%, while astrocytic ATP depletion ranged from 79.07% to 93.81%.
-
-After the fixed 1000-second reperfusion period, neuronal ATP approached its pre-ischemia baseline in all five simulations. Astrocytic ATP showed a modest overshoot relative to baseline in the model.
-
-### Extracellular Lactate Mass-Balance Analysis
+### Extracellular lactate transport and mass balance
 
 The extracellular lactate balance was decomposed into three transport contributions:
 
@@ -201,89 +165,88 @@ The extracellular lactate balance was decomposed into three transport contributi
 2. Astrocytic-to-extracellular lactate transport.
 3. Extracellular-to-capillary lactate transport.
 
-The model's extracellular lactate balance is represented by:
+Using the model's transport sign convention, the extracellular lactate balance is:
 
-
-The extracellular lactate balance is represented by:
-
-$$
-\frac{d[LAC]_e}{dt}
+[
+rac{d[LAC]_e}{dt}
 =
-\frac{v_{LACne}}{r_{en}}
+rac{v_{LACne}}{r_{en}}
 +
-\frac{v_{LACge}}{r_{eg}}
+rac{v_{LACge}}{r_{eg}}
 -
 v_{LACec}
-$$
+]
 
+The analysis of the five ischemia durations showed that:
 
-The analysis revealed:
-
-- Astrocytic transport made a positive cumulative contribution to extracellular lactate across all five simulations.
-- Neuronal transport exhibited transient positive contributions during reperfusion in the longer ischemia simulations, although its cumulative contribution over the complete reperfusion period remained negative.
+- Astrocytic transport made a positive cumulative contribution to extracellular lactate over the reperfusion period in all five simulations.
+- Neuronal transport showed transient positive contributions during reperfusion in the longer ischemia simulations, although its cumulative contribution over the complete reperfusion period was negative.
 - Extracellular-to-capillary transport contributed negatively to the extracellular lactate balance.
 - The integrated transport contributions reproduced the simulated change in extracellular lactate concentration with very small numerical differences.
 
-Astrocytic transport represented approximately 48.4–49.5% of the combined absolute integrated transport magnitude across the five conditions. These percentages describe relative transport magnitudes, not the proportion of total lactate production.
+Astrocytic transport accounted for approximately 48.5–49.5% of the combined absolute integrated transport magnitude across the five conditions. This percentage describes the relative magnitude of the integrated transport contributions; it is **not** the proportion of total lactate production attributable to astrocytes.
 
-### Comparison with Experimental Studies
+The integrated net transport balance closely matched the actual change in extracellular lactate over the 1000-second reperfusion interval. This agreement is a numerical mass-balance consistency check within the model, rather than independent experimental validation.
+
+### Comparison with experimental studies
 
 The model's glucose and lactate responses were compared descriptively with published transient cerebral ischemia studies, including:
 
-- Frykholm et al. (2005), investigating transient middle cerebral artery occlusion in macaques.
-- Havelund et al. (2019), investigating transient focal ischemia in rats.
+- Frykholm et al. (2005), a study of cerebral blood flow, oxygen metabolism, and extracellular glucose and lactate during middle cerebral artery occlusion and reperfusion in nonhuman primates.
+- Havelund et al. (2019), a study of brain metabolites during mitochondrial inhibition and transient cerebral ischemia in rats.
 
-The comparison was exploratory and was not intended as formal model validation. Differences in species, ischemia protocols, brain regions, sampling methods and observation periods limit direct quantitative comparisons.
+This comparison was exploratory and was not intended as formal model validation. Differences in species, ischemia protocols, brain regions, sampling methods, and observation periods limit direct quantitative comparison.
 
-### Figures and Results
+### Figures and results
 
-- Figures 1–5: ATP, glucose, lactate, oxygen and metabolic time-course responses.
-- Figure 6: Exploratory comparison with experimental glucose and lactate observations.
-- Figure 7: Cellular lactate dehydrogenase fluxes.
-- Figure 8: Lactate transport fluxes.
-- Figure 9: Extracellular lactate balance.
-- Figure 10: Numerical consistency of the extracellular lactate mass-balance analysis.
+The analysis generated figures covering:
+- ATP, glucose, lactate, and oxygen time courses.
+- Exploratory comparison with published experimental glucose and lactate observations.
+- Cellular lactate dehydrogenase fluxes.
+- Lactate transport fluxes.
+- Extracellular lactate balance and mass-balance consistency.
 
 ### Reproducibility
 
-The ischemia–reperfusion investigation can be explored using:
+The main ischemia–reperfusion simulation and analysis entry points are:
 
 ```bash
-
-# Run the original ischemia-reperfusion simulation
+# Run an ischemia–reperfusion simulation
 python simulate_ischemia.py
 
-# Run ischemia simulations for five durations
+# Run the ischemia-duration sweep (one duration per run)
 python simulate_ischemia_sweep.py 300
 python simulate_ischemia_sweep.py 600
 python simulate_ischemia_sweep.py 1000
 python simulate_ischemia_sweep.py 1500
 python simulate_ischemia_sweep.py 2000
 
-# Analyse ischemia and metabolic responses
+# Analyse the duration sweep and lactate fluxes
 python analyse_ischemia_sweep.py
 python analyse_lactate_fluxes.py
 
-# Analyse extracellular lactate balance
+# Analyse extracellular lactate mass balance and contributions
 python analyse_lactate_mass_balance.py
-python analyse_reperfusion_mass_balance.py
 python analyse_reperfusion_contribution_peaks.py
 python analyse_cumulative_lactate_contributions.py
 python analyse_relative_lactate_contributions.py
-
 ```
 
-The scripts use the model implementation and simulation output files in this repository. Some analyses require the corresponding simulation datasets to have been generated first.
+The analysis scripts depend on the corresponding simulation output files. Generate the required simulation datasets before running downstream analyses. The exact execution order and input filenames should be checked in each script.
 
-### Limitations
+## Limitations and future directions
 
-These results are predictions from a mechanistic computational model. They do not independently establish neuronal survival, tissue protection or clinical outcomes.
+The results presented here are predictions from a mechanistic computational model. They do not independently establish neuronal survival, tissue protection, or clinical outcomes.
 
-The original model does not explicitly represent glycogen metabolism. Further extensions, including glycogen metabolism and the pentose phosphate pathway, would require additional model development and evaluation.
+Key limitations include:
+- The numerical comparisons with MATLAB cover selected metrics and do not establish equivalence for every state variable and condition.
+- Additional stimulation and ischemia–reperfusion simulations are model-based predictions and have not been independently validated against new experimental data.
+- Results depend on the model structure, parameterization, initial conditions, and numerical integration settings.
+- The current model does not explicitly represent glycogen metabolism. Adding glycogen metabolism or the pentose phosphate pathway would require further model development and evaluation.
 
-The current investigation is intended as a foundation for further comparison with experimental measurements and discussion of potential model extensions.
+Potential future work includes parameter sensitivity analysis, additional quantitative comparisons with experimental measurements, and carefully evaluated extensions to the metabolic pathways represented in the model.
 
-###  References
+## References
 
 Frykholm, P., Hillered, L., Långström, B., Persson, L., Valtysson, J., & Enblad, P. (2005). Relationship between cerebral blood flow and oxygen metabolism, and extracellular glucose and lactate concentrations during middle cerebral artery occlusion and reperfusion: A microdialysis and positron emission tomography study in nonhuman primates. *Journal of Neurosurgery, 102*(6), 1076–1084. https://doi.org/10.3171/jns.2005.102.6.1076
 
@@ -291,16 +254,15 @@ Havelund, J. F., Nygaard, K. H., Nielsen, T. H., Nordström, C.-H., Poulsen, F. 
 
 Jolivet, R. (2023). *D5.1: Report on biophysical model* (Version 2.0). GAMMA-MRI, Horizon 2020 Research and Innovation Programme, Grant Agreement No. 964644. Submitted 4 December 2023.
 
-## Original Publication and Attribution
+Jolivet, R., Coggan, J. S., Allaman, I., & Magistretti, P. J. (2015). Multi-timescale modeling of activity-dependent metabolic coupling in the neuron-glia-vasculature ensemble. *PLOS Computational Biology, 11*(2), e1004036. https://doi.org/10.1371/journal.pcbi.1004036
 
-Jolivet, R., Coggan, J. S., Allaman, I., & Magistretti, P. J. (2015). Multi-timescale modeling of activity-dependent metabolic coupling in the neuron-glia-vasculature ensemble. *PLOS Computational Biology, 11*(2), e1004036.
+## Attribution
 
-https://doi.org/10.1371/journal.pcbi.1004036
-
-Attribution: The original mathematical model and its scientific framework were developed by Jolivet and colleagues. This repository documents my independent Python implementation, numerical comparisons, and subsequent computational analyses. The original MATLAB source code is not redistributed in this repository.
+The original mathematical model and scientific framework were developed by Jolivet and colleagues. This repository documents my independent Python implementation, numerical comparisons, and subsequent computational analyses. The original MATLAB source code is not redistributed in this repository.
 
 ## Author
-Kingsley Nnaemeka Ugochukwu
+
+**Kingsley Nnaemeka Ugochukwu**  
 MSc Student, Biochemistry and Molecular Biology  
 Obafemi Awolowo University, Ile-Ife, Nigeria
 

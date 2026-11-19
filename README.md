@@ -110,8 +110,17 @@ The normalized trajectories were compared with the `Ne = 240` reference conditio
 
 The small RMSD values indicate broadly similar fractional PCr recovery trajectories across the tested stimulation conditions. This is a model-specific computational observation, not a claim that biological PCr recovery is universally independent of neuronal activity.
 
+To regenerate the required NPZ inputs from the model implementation, run:
+
+```bash
+python generate_pcr_datasets.py
+```
+
+This runs each of the five stimulation conditions once to 620 s and writes both the 0–20 s stimulation segment and the complete 20 s stimulation plus 600 s follow-up trajectory. It uses `simulation_runner.py` and does not alter the model equations or parameter values. The generated NPZ files are local analysis outputs and are not committed to the repository; regenerate them before running the analyses below.
+
 Relevant scripts include:
 
+- `generate_pcr_datasets.py` — regenerates all ten NPZ input datasets.
 - `analyze_phosphocreatine.py`
 - `compare_normalized_pcr_recovery.py`
 - `calculate_pcr_rmsd.py`

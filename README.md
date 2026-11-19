@@ -118,9 +118,18 @@ python generate_pcr_datasets.py
 
 This runs each of the five stimulation conditions once to 620 s and writes both the 0–20 s stimulation segment and the complete 20 s stimulation plus 600 s follow-up trajectory. It uses `simulation_runner.py` and does not alter the model equations or parameter values. The generated NPZ files are local analysis outputs and are not committed to the repository; regenerate them before running the analyses below.
 
+To regenerate the three core PCr plots after generating the NPZ files, run:
+
+```bash
+python plot_pcr_figures.py
+```
+
+This produces `Phosphocreatine_time_course.png` (0–20 s stimulation), `PCr_recovery_comparison.png` (absolute PCr as a percentage of baseline over the full simulation), and `Normalized_PCr_recovery.png` (percentage of depleted PCr replenished, aligned to each condition's PCr minimum). The PNG files are generated locally and are not committed by the script.
+
 Relevant scripts include:
 
 - `generate_pcr_datasets.py` — regenerates all ten NPZ input datasets.
+- `plot_pcr_figures.py` — regenerates the three core PCr figures.
 - `analyze_phosphocreatine.py`
 - `compare_normalized_pcr_recovery.py`
 - `calculate_pcr_rmsd.py`

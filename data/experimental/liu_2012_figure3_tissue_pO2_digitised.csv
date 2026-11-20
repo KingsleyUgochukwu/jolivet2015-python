@@ -1,0 +1,23 @@
+study,group,phase,phase_time_min,elapsed_from_mcao_onset_min,pO2_change_percent_from_baseline,value_type,source_figure,sample_size
+Liu_2012,UNICAR,MCAO,0,0,0.0,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,MCAO,0,0,0.0,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,MCAO,10,10,-42.1,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,MCAO,10,10,-36.2,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,MCAO,20,20,-53.6,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,MCAO,20,20,-43.7,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,MCAO,30,30,-59.4,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,MCAO,30,30,-49.5,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,MCAO,60,60,-67.3,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,MCAO,60,60,-58.5,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,MCAO,90,90,-68.9,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,MCAO,90,90,-62.4,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,Reperfusion,0,90,-67.1,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,Reperfusion,0,90,-58.6,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,Reperfusion,5,95,-41.4,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,Reperfusion,5,95,-46.2,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,Reperfusion,10,100,-35.4,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,Reperfusion,10,100,-38.8,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,Reperfusion,20,110,-23.4,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,Reperfusion,20,110,-30.0,digitised_mean_approximation,Figure 3,9
+Liu_2012,UNICAR,Reperfusion,30,120,-18.5,digitised_mean_approximation,Figure 3,9
+Liu_2012,BICAR,Reperfusion,30,120,-23.9,digitised_mean_approximation,Figure 3,9

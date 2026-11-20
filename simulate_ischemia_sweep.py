@@ -404,20 +404,24 @@ ischemia_array = np.array(ischemia_states)
 
 ischemia_data = np.column_stack([
     np.array(ischemia_times),
-    ischemia_array[:, 14],
-    ischemia_array[:, 15],
-    ischemia_array[:, 25],
-    ischemia_array[:, 26],
-    ischemia_array[:, 20],
+    ischemia_array[:, 14],  # Neuronal ATP
+    ischemia_array[:, 15],  # Astrocytic ATP
+    ischemia_array[:, 25],  # Extracellular glucose
+    ischemia_array[:, 26],  # Extracellular lactate
+    ischemia_array[:, 18],  # Neuronal oxygen
+    ischemia_array[:, 19],  # Astrocytic oxygen
+    ischemia_array[:, 20],  # Capillary oxygen
 ])
 
 reperfusion_data = np.column_stack([
     solution.t,
-    solution.y[14, :],
-    solution.y[15, :],
-    solution.y[25, :],
-    solution.y[26, :],
-    solution.y[20, :],
+    solution.y[14, :],  # Neuronal ATP
+    solution.y[15, :],  # Astrocytic ATP
+    solution.y[25, :],  # Extracellular glucose
+    solution.y[26, :],  # Extracellular lactate
+    solution.y[18, :],  # Neuronal oxygen
+    solution.y[19, :],  # Astrocytic oxygen
+    solution.y[20, :],  # Capillary oxygen
 ])
 
 # Avoid duplicating the shared reperfusion boundary
@@ -430,7 +434,16 @@ np.savetxt(
     f"ischemia_reperfusion_{int(ischemia_duration)}s.csv",
     combined_data,
     delimiter=",",
-    header="time_s,neuronal_ATP,astrocytic_ATP,extracellular_glucose,extracellular_lactate,capillary_oxygen",
+    header=(
+        "time_s,"
+        "neuronal_ATP,"
+        "astrocytic_ATP,"
+        "extracellular_glucose,"
+        "extracellular_lactate,"
+        "neuronal_oxygen,"
+        "astrocytic_oxygen,"
+        "capillary_oxygen"
+    ),
     comments="",
 )
 
@@ -439,5 +452,107 @@ print("Number of recorded time points:", len(combined_data))
 print("First recorded time:", combined_data[0, 0])
 print("Last recorded time:", combined_data[-1, 0])
 
+# --------------------------------------------------
+# Extended metabolic time-course dataset
+# --------------------------------------------------
 
+# Combine the state variables using the same time points
+# as the original combined_data array.
+combined_states = np.vstack([
+    ischemia_array,
+    solution.y[:, 1:].T,
+])
 
+# Extract ATP concentrations
+ATP_n = combined_states[:, 14]
+ATP_g = combined_states[:, 15]
+
+# Calculate ADP using the original model relationship
+qAK = 0.92
+A = 2.212
+
+ADP_n = (
+    ATP_n / 2
+    * (
+        -qAK
+        + np.sqrt(
+            qAK**2
+            + 4 * qAK * (A / ATP_n - 1)
+        )
+    )
+)
+
+ADP_g = (
+    ATP_g / 2
+    * (
+        -qAK
+        + np.sqrt(
+            qAK**2
+            + 4 * qAK * (A / ATP_g - 1)
+        )
+    )
+)
+
+# Extract mitochondrial NADH
+NADH_n_mito = combined_states[:, 31]
+NADH_g_mito = combined_states[:, 32]
+
+# Extract cellular oxygen concentrations
+O2_n = combined_states[:, 18]
+O2_g = combined_states[:, 19]
+
+# Calculate neuronal mitochondrial oxygen consumption
+vMitoout_n = (
+    params["VMaxMitooutn"]
+    * O2_n / (O2_n + params["KO2Mito"])
+    * ADP_n / (ADP_n + params["KmADPn"])
+    * NADH_n_mito / (params["KmNADHn"] + NADH_n_mito)
+)
+
+# Calculate astrocytic mitochondrial oxygen consumption
+vMitoout_g = (
+    params["VMaxMitooutg"]
+    * O2_g / (O2_g + params["KO2Mito"])
+    * ADP_g / (ADP_g + params["KmADPg"])
+    * NADH_g_mito / (params["KmNADHg"] + NADH_g_mito)
+)
+
+# Assemble extended dataset
+metabolic_data = np.column_stack([
+    combined_data,
+    ADP_n,
+    ADP_g,
+    NADH_n_mito,
+    NADH_g_mito,
+    vMitoout_n,
+    vMitoout_g,
+])
+
+# Save separately to preserve the original dataset
+np.savetxt(
+    f"ischemia_reperfusion_{int(ischemia_duration)}s_metabolic.csv",
+    metabolic_data,
+    delimiter=",",
+    header=(
+        "time_s,"
+        "neuronal_ATP,"
+        "astrocytic_ATP,"
+        "extracellular_glucose,"
+        "extracellular_lactate,"
+        "neuronal_oxygen,"
+        "astrocytic_oxygen,"
+        "capillary_oxygen,"
+        "neuronal_ADP,"
+        "astrocytic_ADP,"
+        "neuronal_mitochondrial_NADH,"
+        "astrocytic_mitochondrial_NADH,"
+        "neuronal_mitochondrial_oxygen_consumption,"
+        "astrocytic_mitochondrial_oxygen_consumption"
+    ),
+    comments="",
+)
+
+print("\nExtended metabolic dataset saved successfully.")
+print("Number of columns:", metabolic_data.shape[1])
+print("Number of time points:", metabolic_data.shape[0])
+print("Output: ischemia_reperfusion_1000s_metabolic.csv")

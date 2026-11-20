@@ -2,11 +2,12 @@
 
 ## Project overview
 
-This repository documents a Python implementation and computational investigation of the neuron–glia–vasculature metabolic model described by Jolivet et al. (2015). The work has two connected parts:
+This repository documents a Python implementation and computational investigation of the neuron–glia–vasculature metabolic model described by Jolivet et al. (2015).
 
-1. Reproduction and analysis of activity-dependent brain energy metabolism, including neuronal stimulation, ATP production and consumption, and phosphocreatine (PCr) dynamics.
-2. An extension of the model to investigate transient cerebral ischemia and reperfusion, with emphasis on cellular ATP responses, extracellular glucose and lactate, and lactate transport and mass balance.
+This project has two connected stages:
 
+1. **Original model reproduction:** Independent Python implementation and computational analysis of the Jolivet et al. (2015) neuron–glia–vasculature metabolic model, building on earlier MATLAB and GNU Octave reproduction and comparison work.
+2. **Research extension:** Investigation of transient cerebral ischaemia and reperfusion, focusing on cellular ATP responses, extracellular glucose and lactate dynamics, and lactate transport and mass balance.
 The original framework couples neuronal activity, astrocytic metabolism, substrate exchange, and vascular responses. The Python work aims to reproduce the published model behaviour and use the implementation to conduct additional, clearly identified computational experiments.
 
 This is an independent computational research and training project developed by Kingsley Nnaemeka Ugochukwu, MSc student in Biochemistry and Molecular Biology at Obafemi Awolowo University, Nigeria.
@@ -47,11 +48,15 @@ The model implementation contains 33 state variables and uses the parameterizati
 
 The stiff ordinary differential equation system is integrated in Python using SciPy's BDF solver.
 
-## Python implementation checks and validation status
+## Original model reproduction and cross-platform validation
 
-The current `compare_matlab_python.py` script performs an internal audit of the Python implementation. It checks the 33-element state vector, initial conditions, resting and stimulated rate/derivative calculations, finite numerical values, and selected expected stimulation-onset behaviours.
+The original Jolivet et al. (2015) neuron–glia–vasculature model was reproduced in Python, building on earlier implementations and comparisons performed using MATLAB and GNU Octave.
 
-These checks are useful for detecting implementation inconsistencies within the Python model. They do **not** constitute a quantitative comparison with the original MATLAB implementation. Direct MATLAB reference trajectories or numerical outputs are still required to establish cross-language agreement. Systematic reproduction of the published model figures and comparison with the corresponding reference results therefore remain important validation tasks.
+The Python implementation contains 33 state variables and reproduces the model's principal metabolic, neuronal, astrocytic, and vascular processes. The implementation was assessed against the original model using selected response and endpoint metrics.
+
+The original project documentation reports a mean percentage error of **0.0185%** and a maximum percentage error of **0.1507%** across 14 selected metrics. These figures are reported results from the earlier validation work; the underlying MATLAB and GNU Octave comparison outputs and full validation procedure are not currently archived in this repository.
+
+The current `compare_matlab_python.py` script performs an internal consistency audit of the Python implementation, including checks of the state vector, initial conditions, reaction rates, and derivatives. It should not be interpreted as a standalone MATLAB or GNU Octave comparison.
 
 The original MATLAB source code is not redistributed in this repository.
 
@@ -181,16 +186,15 @@ The extracellular lactate balance was decomposed into three transport contributi
 3. Extracellular-to-capillary lactate transport.
 
 Using the model's transport sign convention, the extracellular lactate balance is:
-
-[
-rac{d[LAC]_e}{dt}
+$$
+\frac{d[LAC]_e}{dt}
 =
-rac{v_{LACne}}{r_{en}}
+\frac{v_{LACne}}{r_{en}}
 +
-rac{v_{LACge}}{r_{eg}}
+\frac{v_{LACge}}{r_{eg}}
 -
 v_{LACec}
-]
+$$
 
 The analysis of the five ischemia durations showed that:
 
@@ -203,20 +207,22 @@ Astrocytic transport accounted for approximately 48.5–49.5% of the combined ab
 
 The integrated net transport balance closely matched the actual change in extracellular lactate over the 1000-second reperfusion interval. This agreement is a numerical mass-balance consistency check within the model, rather than independent experimental validation.
 
-### Comparison with experimental studies
+### Literature context
 
-The model's glucose and lactate responses were compared descriptively with published transient cerebral ischemia studies, including:
+Published experimental studies provide relevant context for interpreting the model-predicted metabolic responses:
 
-- Frykholm et al. (2005), a study of cerebral blood flow, oxygen metabolism, and extracellular glucose and lactate during middle cerebral artery occlusion and reperfusion in nonhuman primates.
-- Havelund et al. (2019), a study of brain metabolites during mitochondrial inhibition and transient cerebral ischemia in rats.
+- Frykholm et al. (2005) investigated cerebral blood flow, oxygen metabolism, and extracellular glucose and lactate during middle cerebral artery occlusion and reperfusion in nonhuman primates.
+- Havelund et al. (2019) investigated endogenous and ¹³C-labelled brain metabolites during mitochondrial inhibition and transient cerebral ischaemia in rats.
 
-This comparison was exploratory and was not intended as formal model validation. Differences in species, ischemia protocols, brain regions, sampling methods, and observation periods limit direct quantitative comparison.
+These studies are relevant experimental comparators, but their measurements are not directly overlaid with the model outputs in the current analysis. Differences in species, ischaemia protocols, brain regions, sampling methods, and observation periods also need to be considered before attempting quantitative comparisons.
+
+The current glucose and lactate figures therefore present model-derived predictions only. They should not be interpreted as experimental validation.
 
 ### Figures and results
 
 The analysis generated figures covering:
 - ATP, glucose, lactate, and oxygen time courses.
-- Exploratory comparison with published experimental glucose and lactate observations.
+- Model-predicted extracellular glucose and lactate responses across different ischaemia durations.
 - Cellular lactate dehydrogenase fluxes.
 - Lactate transport fluxes.
 - Extracellular lactate balance and mass-balance consistency.
@@ -257,7 +263,7 @@ The analysis scripts depend on the corresponding simulation output files. Genera
 The results presented here are predictions from a mechanistic computational model. They do not independently establish neuronal survival, tissue protection, or clinical outcomes.
 
 Key limitations include:
-- The current comparison script performs internal consistency checks on the Python implementation; quantitative comparison against MATLAB reference outputs has not yet been completed.
+- Although the original model was previously reproduced and compared across MATLAB, GNU Octave and Python, the underlying cross-platform comparison outputs and full validation procedure are not currently archived in this repository. The current Python consistency checks provide additional implementation-level checks but do not independently reproduce the earlier cross-platform comparison.
 - Additional stimulation and ischemia–reperfusion simulations are model-based predictions and have not been independently validated against new experimental data.
 - Results depend on the model structure, parameterization, initial conditions, and numerical integration settings.
 - The current model does not explicitly represent glycogen metabolism. Adding glycogen metabolism or the pentose phosphate pathway would require further model development and evaluation.
